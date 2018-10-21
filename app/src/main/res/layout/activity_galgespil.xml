@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Galgespil"
+    tools:layout_editor_absoluteY="25dp">
+
+    <ImageView
+        android:id="@+id/GalgeBillede"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/BrugteBogstaver"
+        app:layout_constraintStart_toStartOf="@+id/BrugteBogstaver"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/galge" />
+
+    <EditText
+        android:id="@+id/Svar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="1dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/GuessAnswer"
+        app:layout_constraintEnd_toEndOf="@+id/Resultat"
+        app:layout_constraintTop_toBottomOf="@+id/Resultat" />
+
+    <TextView
+        android:id="@+id/Resultat"
+        android:layout_width="220dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="22dp"
+        app:layout_constraintBottom_toTopOf="@+id/Svar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BrugteBogstaver" />
+
+    <Button
+        android:id="@+id/GuessAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="67dp"
+        android:layout_marginStart="50dp"
+        android:text="Gæt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/Svar"
+        app:layout_constraintTop_toBottomOf="@+id/Svar" />
+
+    <TextView
+        android:id="@+id/BrugteBogstaver"
+        android:layout_width="218dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/Resultat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GalgeBillede" />
+
+</android.support.constraint.ConstraintLayout>

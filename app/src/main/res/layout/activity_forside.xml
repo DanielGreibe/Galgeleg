@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Forside"
+    tools:layout_editor_absoluteY="25dp">
+
+    <ImageView
+        android:id="@+id/ForsideImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/ForsideStartSpilButton"
+        app:layout_constraintStart_toStartOf="@+id/ForsideTextView"
+        app:layout_constraintTop_toBottomOf="@+id/ForsideTextView"
+        app:srcCompat="@drawable/forkert6" />
+
+    <Button
+        android:id="@+id/ForsideIndstillingerButton"
+        android:layout_width="209dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="65dp"
+        android:text="Indstillinger"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ForsideStartSpilButton" />
+
+    <Button
+        android:id="@+id/ForsideStartSpilButton"
+        android:layout_width="209dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:text="Start spillet!"
+        app:layout_constraintBottom_toTopOf="@+id/ForsideIndstillingerButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ForsideImage" />
+
+    <TextView
+        android:id="@+id/ForsideTextView"
+        android:layout_width="221dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="23dp"
+        android:layout_marginTop="16dp"
+        android:text="Galgeleg"
+        android:textAlignment="center"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/ForsideImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
