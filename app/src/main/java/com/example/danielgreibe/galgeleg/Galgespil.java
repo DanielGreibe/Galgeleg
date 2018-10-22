@@ -46,7 +46,7 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-        if(v == GuessAnswer)
+        if(v == GuessAnswer && Spil.erSpilletSlut() == false)
         {
 
             //Ser om bogstavet er en del af ordet
@@ -61,7 +61,7 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
                 this.BrugteBogstaver.setText(BrugteBogstaverString);
 
             }
-            BrugteBogstaver.setText(BrugteBogstaverString);
+            BrugteBogstaver.setText(BrugteBogstaverString.toUpperCase());
             BrugteBogstaverString = "Brugte Bogstaver: ";
 
             int NumberOfErrors = Spil.getAntalForkerteBogstaver();
@@ -96,14 +96,24 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
             {
                 if (Spil.erSpilletVundet() == true)
                 {
-                    Resultat.setText("Du vandt, Tillykke!");
+                    Resultat.setText("Tillykke! Det var selvfølgelig " + Spil.getOrdet() + " du skulle gætte");
+                    GuessAnswer.setText("Start et nyt spil");
                 }
                 else
                 {
                     Log.e("Debug", "SpillerErTabt");
-                    Resultat.setText("Desværre, du tabte. Bedre held næste gang!");
+                    Resultat.setText("Desværre, du tabte. Ordet var " + Spil.getOrdet());
+                    GuessAnswer.setText("Start et nyt spil");
                 }
             }
+        }
+        else if (v == GuessAnswer && Spil.erSpilletSlut() == true)
+        {
+            Spil.nulstil();
+            Svar.setText("");
+            GuessAnswer.setText("Gæt");
+            BrugteBogstaver.setText("");
+            Resultat.setText("");
         }
     }
 

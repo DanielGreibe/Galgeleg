@@ -6,4 +6,64 @@
     android:layout_height="match_parent"
     tools:context=".Indstillinger">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="160dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="210dp"
+        android:text="Indstillinger"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginEnd="33dp"
+        android:text="Skift sprog"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton2"
+        app:layout_constraintStart_toStartOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="42dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:onClick="ChangeLanguage(English)"
+        android:scaleType="fitCenter"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:srcCompat="@drawable/english" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="168dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:onClick="ChangeLanguage(English)"
+        android:scaleType="fitCenter"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:srcCompat="@drawable/danish" />
+
 </android.support.constraint.ConstraintLayout>
