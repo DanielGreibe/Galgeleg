@@ -11,33 +11,39 @@
         android:id="@+id/GalgeBillede"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@+id/BrugteBogstaver"
-        app:layout_constraintStart_toStartOf="@+id/BrugteBogstaver"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside"
         app:srcCompat="@drawable/galge" />
 
     <EditText
         android:id="@+id/Svar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/GuessAnswer"
-        app:layout_constraintEnd_toEndOf="@+id/Resultat"
-        app:layout_constraintTop_toBottomOf="@+id/Resultat" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GuessAnswer" />
 
     <TextView
         android:id="@+id/Resultat"
         android:layout_width="220dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/Svar"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BrugteBogstaver" />
 
@@ -45,18 +51,20 @@
         android:id="@+id/GuessAnswer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="67dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="8dp"
         android:text="Gæt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Svar"
-        app:layout_constraintTop_toBottomOf="@+id/Svar" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Resultat" />
 
     <TextView
         android:id="@+id/BrugteBogstaver"
-        android:layout_width="218dp"
-        android:layout_height="0dp"
+        android:layout_width="219dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="36dp"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/Resultat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

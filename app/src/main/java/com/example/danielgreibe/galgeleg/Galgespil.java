@@ -1,18 +1,21 @@
 package com.example.danielgreibe.galgeleg;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Galgespil extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,13 +26,19 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
     ImageView GalgeBillede;
     TextView BrugteBogstaver;
     String BrugteBogstaverString = "Brugte Bogstaver: ";
+    String[] HighscoreList = new String[10];
+    int AntalVundneSpil;
+    int CurrentWinStreak;
+    int BestWinStreak;
+    List<String> NyeOrd;
 
 
-    @Override
+@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galgespil);
 
+        getSavedData();
         Svar = findViewById(R.id.Svar);
         Spil = new Galgelogik();
         Resultat = findViewById(R.id.Resultat);
@@ -40,13 +49,64 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
         Svar.setHint("Indtast bogstav her");
         GuessAnswer.setOnClickListener(this);
 
-        //Svar.setOnEditorActionListener(this);
+        NyeOrd = new ArrayList<>();
+
+
+
+    Toast toast = Toast.makeText(Galgespil.this, "Fetching words from server", Toast.LENGTH_LONG);
+    View view = toast.getView();
+
+    //Gets the actual oval background of the Toast then sets the colour filter
+    view.getBackground().setColorFilter(Color.parseColor("#90282C34"), PorterDuff.Mode.SRC_IN);
+
+    //Gets the TextView from the Toast so it can be editted
+    TextView text = view.findViewById(android.R.id.message);
+    text.setTextColor(Color.parseColor("#61AEEE"));
+    toast.show();
+    //Toast.makeText(getApplicationContext(),"Fetching words from server",Toast.LENGTH_LONG).show();
+
+
+new AsyncTask()
+        {
+        @Override
+        protected Object doInBackground(Object... arg0)
+            {
+            try
+                {
+                Spil.hentOrdFraDr();
+                return "Færdig med at hente. Spillet er nu klar";
+                } catch (Exception e)
+                {
+                e.printStackTrace();
+                return "Noget gik galt, prøv igen senere: " + e;
+                }
+            }
+
+        @Override
+        protected void onPostExecute(Object resultat)
+            {
+            Toast toast1 = Toast.makeText(Galgespil.this, "Progress: \n" + resultat, Toast.LENGTH_SHORT);
+            View view = toast1.getView();
+
+            //Gets the actual oval background of the Toast then sets the colour filter
+            view.getBackground().setColorFilter(Color.parseColor("#90282C34"), PorterDuff.Mode.SRC_IN);
+
+            //Gets the TextView from the Toast so it can be editted
+            TextView text = view.findViewById(android.R.id.message);
+            text.setTextColor(Color.parseColor("#61AEEE"));
+            toast1.show();
+
+            //Toast.makeText(getApplicationContext(),"Progress: \n" + resultat,Toast.LENGTH_SHORT).show();
+            Resultat.setText(Spil.getSynligtOrd());
+            }
+        }.execute();
+
     }
 
     @Override
     public void onClick(View v)
     {
-        if(v == GuessAnswer && Spil.erSpilletSlut() == false)
+        if(v == GuessAnswer && !Spil.erSpilletSlut())
         {
 
             //Ser om bogstavet er en del af ordet
@@ -91,19 +151,28 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
                 break;
             }
             Resultat.setText(Spil.getSynligtOrd());
+            Svar.setText("");
 
             if(Spil.erSpilletSlut())
             {
                 if (Spil.erSpilletVundet() == true)
                 {
+                    AntalVundneSpil++;
+                    CurrentWinStreak++;
                     Resultat.setText("Tillykke! Det var selvfølgelig " + Spil.getOrdet() + " du skulle gætte");
                     GuessAnswer.setText("Start et nyt spil");
+                    saveHighscore();
+
                 }
                 else
                 {
                     Log.e("Debug", "SpillerErTabt");
+                    CurrentWinStreak = 0;
                     Resultat.setText("Desværre, du tabte. Ordet var " + Spil.getOrdet());
                     GuessAnswer.setText("Start et nyt spil");
+                    String Highscore = "Ordlænge: " + Spil.getOrdet().length() + "    Antal fejl: " + Spil.getAntalForkerteBogstaver();
+                    NyeOrd.add(Highscore);
+                    saveHighscore();
                 }
             }
         }
@@ -113,28 +182,37 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
             Svar.setText("");
             GuessAnswer.setText("Gæt");
             BrugteBogstaver.setText("");
-            Resultat.setText("");
+            Resultat.setText(Spil.getSynligtOrd());
         }
     }
 
+public void saveHighscore()
+    {
 
+        SharedPreferences settings = getSharedPreferences("PREFS",0);
+        SharedPreferences.Editor editor = settings.edit();
 
+        editor.putInt("AntalVundneSpil", AntalVundneSpil);
+        editor.putInt("AntalVundetIStreg", CurrentWinStreak);
 
-
-
-
-
-
-
-
-    /*@Override
-    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        if(i == EditorInfo.IME_ACTION_SEND || i == EditorInfo.IME_NULL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN)
-        {
-            Resultat.setText("Test123");
-            return true;
-        }
-        return false;
+        if (CurrentWinStreak > BestWinStreak)
+            {
+            BestWinStreak = CurrentWinStreak;
+            editor.putInt("BestWinStreak", BestWinStreak);
+            }
+        editor.commit();
     }
-    */
+
+public void printSaveData()
+    {
+    Log.d("listItems", "TESTVÆRDI: af ANTALVUNDNEISTREG   " + CurrentWinStreak);
+    Log.d("listItems", "TESTVÆDRDI af ANTALVUNDNESPIL   " + AntalVundneSpil);
+
+    }
+public void getSavedData()
+    {
+    SharedPreferences settings = getSharedPreferences("PREFS",0);
+    CurrentWinStreak =  settings.getInt("AntalVundetIStreg",0);
+    AntalVundneSpil = settings.getInt("AntalVundneSpil", 0);
+    }
 }
