@@ -21,6 +21,8 @@
         <activity android:name=".Galgespil" />
         <activity android:name=".Indstillinger" />
         <activity android:name=".Achievements" />
+        <activity android:name=".Vundet" />
+        <activity android:name=".Tabt" />
     </application>
 
 </manifest>

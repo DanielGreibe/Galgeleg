@@ -1,5 +1,6 @@
 package com.example.danielgreibe.galgeleg;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -17,6 +18,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.graphics.Color.GREEN;
+import static android.graphics.Color.RED;
+import static android.graphics.Color.rgb;
+
 public class Galgespil extends AppCompatActivity implements View.OnClickListener {
 
     EditText Svar;
@@ -31,12 +36,21 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
     int CurrentWinStreak;
     int BestWinStreak;
     List<String> NyeOrd;
+    static String Color = "White";
+
+public static void setColor(String color)
+    {
+    Color = color;
+    }
+
+
 
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galgespil);
+        farvevalg();
 
         getSavedData();
         Svar = findViewById(R.id.Svar);
@@ -52,16 +66,11 @@ public class Galgespil extends AppCompatActivity implements View.OnClickListener
         NyeOrd = new ArrayList<>();
 
 
-
-    Toast toast = Toast.makeText(Galgespil.this, "Fetching words from server", Toast.LENGTH_LONG);
+    Toast toast = Toast.makeText(Galgespil.this, "Henter ord fra DR!", Toast.LENGTH_LONG);
     View view = toast.getView();
-
-    //Gets the actual oval background of the Toast then sets the colour filter
-    view.getBackground().setColorFilter(Color.parseColor("#90282C34"), PorterDuff.Mode.SRC_IN);
 
     //Gets the TextView from the Toast so it can be editted
     TextView text = view.findViewById(android.R.id.message);
-    text.setTextColor(Color.parseColor("#61AEEE"));
     toast.show();
     //Toast.makeText(getApplicationContext(),"Fetching words from server",Toast.LENGTH_LONG).show();
 
@@ -88,102 +97,137 @@ new AsyncTask()
             Toast toast1 = Toast.makeText(Galgespil.this, "Progress: \n" + resultat, Toast.LENGTH_SHORT);
             View view = toast1.getView();
 
-            //Gets the actual oval background of the Toast then sets the colour filter
-            view.getBackground().setColorFilter(Color.parseColor("#90282C34"), PorterDuff.Mode.SRC_IN);
-
             //Gets the TextView from the Toast so it can be editted
             TextView text = view.findViewById(android.R.id.message);
-            text.setTextColor(Color.parseColor("#61AEEE"));
             toast1.show();
 
             //Toast.makeText(getApplicationContext(),"Progress: \n" + resultat,Toast.LENGTH_SHORT).show();
             Resultat.setText(Spil.getSynligtOrd());
+            //Svar.setText(Spil.getOrdet());
             }
         }.execute();
 
     }
 
-    @Override
+private void farvevalg()
+    {
+    switch (this.Color)
+        {
+        case "Green": getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.Green));
+        break;
+
+        case "Red": getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.Red));
+        break;
+
+        case "Orange": getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.Orange));
+            break;
+
+        case "White": getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.White));
+            break;
+
+        case "Yellow": getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.Yellow));
+            break;
+
+        default: getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.White));
+        break;
+        }
+    }
+
+@Override
     public void onClick(View v)
     {
         if(v == GuessAnswer && !Spil.erSpilletSlut())
         {
 
-            //Ser om bogstavet er en del af ordet
-            Spil.gætBogstav(Svar.getText().toString());
+        opdaterUI();
 
-            /* Gennemløber alle brugte bogstaver og udskriver dem til TextViewet BrugteBogstaver */
-            for(int i = 0; i < Spil.getBrugteBogstaver().size(); i++)
-            {
-
-                ArrayList<String> BrugteBogstaverArrayList =  Spil.getBrugteBogstaver();
-                BrugteBogstaverString = BrugteBogstaverString + BrugteBogstaverArrayList.get(i) + " " ;
-                this.BrugteBogstaver.setText(BrugteBogstaverString);
-
-            }
-            BrugteBogstaver.setText(BrugteBogstaverString.toUpperCase());
-            BrugteBogstaverString = "Brugte Bogstaver: ";
-
-            int NumberOfErrors = Spil.getAntalForkerteBogstaver();
-
-            //Ændrer billede afhængigt af Fejl's værdi
-            switch (NumberOfErrors)
-            {
-                case 0:
-                break;
-
-                case 1: GalgeBillede.setImageResource(R.drawable.forkert1);
-                break;
-
-                case 2: GalgeBillede.setImageResource(R.drawable.forkert2);
-                break;
-
-                case 3: GalgeBillede.setImageResource(R.drawable.forkert3);
-                break;
-
-                case 4: GalgeBillede.setImageResource(R.drawable.forkert4);
-                break;
-
-                case 5: GalgeBillede.setImageResource(R.drawable.forkert5);
-                break;
-
-                case 6: GalgeBillede.setImageResource(R.drawable.forkert6);
-                break;
-            }
-            Resultat.setText(Spil.getSynligtOrd());
-            Svar.setText("");
-
-            if(Spil.erSpilletSlut())
+        if(Spil.erSpilletSlut())
             {
                 if (Spil.erSpilletVundet() == true)
                 {
-                    AntalVundneSpil++;
-                    CurrentWinStreak++;
-                    Resultat.setText("Tillykke! Det var selvfølgelig " + Spil.getOrdet() + " du skulle gætte");
-                    GuessAnswer.setText("Start et nyt spil");
-                    saveHighscore();
+                VundetSpil();
 
                 }
                 else
                 {
-                    Log.e("Debug", "SpillerErTabt");
-                    CurrentWinStreak = 0;
-                    Resultat.setText("Desværre, du tabte. Ordet var " + Spil.getOrdet());
-                    GuessAnswer.setText("Start et nyt spil");
-                    String Highscore = "Ordlænge: " + Spil.getOrdet().length() + "    Antal fejl: " + Spil.getAntalForkerteBogstaver();
-                    NyeOrd.add(Highscore);
-                    saveHighscore();
+                TabtSpil();
                 }
             }
         }
-        else if (v == GuessAnswer && Spil.erSpilletSlut() == true)
-        {
-            Spil.nulstil();
-            Svar.setText("");
-            GuessAnswer.setText("Gæt");
-            BrugteBogstaver.setText("");
-            Resultat.setText(Spil.getSynligtOrd());
-        }
+    }
+
+private void opdaterUI()
+    {
+    //Ser om bogstavet er en del af ordet
+    Spil.gætBogstav(Svar.getText().toString());
+
+    /* Gennemløber alle brugte bogstaver og udskriver dem til TextViewet BrugteBogstaver */
+    for(int i = 0; i < Spil.getBrugteBogstaver().size(); i++)
+    {
+
+        ArrayList<String> BrugteBogstaverArrayList =  Spil.getBrugteBogstaver();
+        BrugteBogstaverString = BrugteBogstaverString + BrugteBogstaverArrayList.get(i) + " " ;
+        this.BrugteBogstaver.setText(BrugteBogstaverString);
+
+    }
+    BrugteBogstaver.setText(BrugteBogstaverString.toUpperCase());
+    BrugteBogstaverString = "Brugte Bogstaver: ";
+
+    int NumberOfErrors = Spil.getAntalForkerteBogstaver();
+
+    //Ændrer billede afhængigt af Fejl's værdi
+    switch (NumberOfErrors)
+    {
+        case 0:
+        break;
+
+        case 1: GalgeBillede.setImageResource(R.drawable.forkert1);
+        break;
+
+        case 2: GalgeBillede.setImageResource(R.drawable.forkert2);
+        break;
+
+        case 3: GalgeBillede.setImageResource(R.drawable.forkert3);
+        break;
+
+        case 4: GalgeBillede.setImageResource(R.drawable.forkert4);
+        break;
+
+        case 5: GalgeBillede.setImageResource(R.drawable.forkert5);
+        break;
+
+        case 6: GalgeBillede.setImageResource(R.drawable.forkert6);
+        break;
+    }
+    Resultat.setText(Spil.getSynligtOrd());
+    Svar.setText("");
+    }
+
+private void VundetSpil()
+    {
+    AntalVundneSpil++;
+    CurrentWinStreak++;
+    saveHighscore();
+
+    Intent Vundet = new Intent(this, com.example.danielgreibe.galgeleg.Vundet.class);
+    Vundet.putExtra("AntalFejl", Spil.getAntalForkerteBogstaver());
+    Vundet.putExtra("RigtigeOrd", Spil.getOrdet());
+    finish();
+    startActivity(Vundet);
+    }
+
+private void TabtSpil()
+    {
+    CurrentWinStreak = 0;
+    String Highscore = "Ordlænge: " + Spil.getOrdet().length() + "    Antal fejl: " + Spil.getAntalForkerteBogstaver();
+    NyeOrd.add(Highscore);
+    saveHighscore();
+
+    Intent Tabt = new Intent(this, com.example.danielgreibe.galgeleg.Tabt.class);
+    Tabt.putExtra("AntalFejl", Spil.getAntalForkerteBogstaver());
+    Tabt.putExtra("RigtigeOrd", Spil.getOrdet());
+    finish();
+    startActivity(Tabt);
     }
 
 public void saveHighscore()
@@ -203,12 +247,6 @@ public void saveHighscore()
         editor.commit();
     }
 
-public void printSaveData()
-    {
-    Log.d("listItems", "TESTVÆRDI: af ANTALVUNDNEISTREG   " + CurrentWinStreak);
-    Log.d("listItems", "TESTVÆDRDI af ANTALVUNDNESPIL   " + AntalVundneSpil);
-
-    }
 public void getSavedData()
     {
     SharedPreferences settings = getSharedPreferences("PREFS",0);
